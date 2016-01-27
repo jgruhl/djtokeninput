@@ -18,8 +18,10 @@ def search(req, app_label, model):
   if hasattr(model, "search"):
     if "q" in req.GET:
       query_set = model.search(req.GET["q"])
-      tokens = _tokens(query_set)
-
+      if hasattr(model.objects, 'search_tokens'):
+        tokens = model.objects.search_tokens(query_set)
+      else:
+        tokens = _tokens(query_set)
     else:
       tokens = []
 
